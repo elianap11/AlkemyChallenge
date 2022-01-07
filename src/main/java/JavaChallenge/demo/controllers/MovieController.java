@@ -1,13 +1,11 @@
 package JavaChallenge.demo.controllers;
 
-import JavaChallenge.demo.entities.CharacterMovie;
 import JavaChallenge.demo.entities.Movie;
 import JavaChallenge.demo.services.MovieService;
 import JavaChallenge.demo.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.view.RedirectView;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,7 +20,6 @@ public class MovieController {
     @Autowired
     private PhotoService photoService;
 
-    //Por filtro
     @GetMapping
     public List<Object[]> showFilterMovies() {
         return movieService.showFilterMovies();
@@ -48,13 +45,18 @@ public class MovieController {
         return movieService.filterByGenre(genre);
     }
 
-    //Falta por orden
     @GetMapping(params = "order")
     public List<Movie> getByOrder(@RequestParam("order") String order){
         return movieService.filterByOrder(order);
     }
 
-
+    @PostMapping("/save")
+    public Movie saveMovie(@RequestBody Movie movie, MultipartFile photo) throws Exception{
+        if (!photo.isEmpty()) {
+            movie.setImage(photoService.copyPhoto(photo));
+        }
+       return movieService.createMovie(movie);
+    }
 
     @DeleteMapping(path = "delete/{id}")
     public String deleteMovie(@PathVariable("id") Integer id){
@@ -64,14 +66,6 @@ public class MovieController {
         } catch (Exception e) {
             return "La película "+id+" no existe";
         }
-    }
-
-
-
-    @PostMapping("/save")
-    public Movie saveMovie(@RequestBody Movie movie){
-       movie.setImage("");
-       return movieService.createMovie(movie);
     }
 
     @GetMapping(path = "enable/{id}")
@@ -96,4 +90,3 @@ public class MovieController {
 
     }*/
 }
-

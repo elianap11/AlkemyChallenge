@@ -41,17 +41,9 @@ public class UserAlkemyService implements UserDetailsService {
     private final String message = "No existe un usuario registrado con el correo %s";
 
     @Transactional
-    public void createUser(String name, String mail, String password, String image, MultipartFile photo) throws Exception, IOException {
+    public UserAlkemy createUser(UserAlkemy userAlkemy, MultipartFile photo) throws Exception, IOException {
 
-       if (userAlkemyRepository.existsByMail(mail)){
-            throw new Exception("Ya existe un usuario asociado con el correo ingresado");
-        }
-
-        UserAlkemy userAlkemy = new UserAlkemy();
-
-        userAlkemy.setName(name);
-        userAlkemy.setMail(mail);
-        userAlkemy.setPassword(encoder.encode(password));
+        //userAlkemy.setPassword(encoder.encode(password));
 
         if (userAlkemyRepository.findAll().isEmpty()) {
             userAlkemy.setUserRole(UserRole.ADMIN);
@@ -59,12 +51,13 @@ public class UserAlkemyService implements UserDetailsService {
             userAlkemy.setUserRole(UserRole.USER);
         }
 
-        if (!photo.isEmpty()) userAlkemy.setImage(photoService.copyPhoto(photo));
+       // if (!photo.isEmpty()) userAlkemy.setImage(photoService.copyPhoto(photo));
 
-        userAlkemy.setStatus(true);
+        //userAlkemy.setStatus(true);
 
-        userAlkemyRepository.save(userAlkemy);
-        emailService.sendThread(mail);
+        return userAlkemyRepository.save(userAlkemy);
+        //emailService.sendThread(mail);
+
     }
 
     @Transactional
@@ -106,11 +99,11 @@ public class UserAlkemyService implements UserDetailsService {
     //Este método entra en juego cuando el usuario se loguea
     public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
         //chequea que el correo exista: permite el acceso o lanza una excepción
-        UserAlkemy courtUser = userAlkemyRepository.findByMail(mail)
+        UserAlkemy userAlkemy = userAlkemyRepository.findByMail(mail)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(message, mail)));
         //La palabra ROLE_ (es la forma que reconoce los roles Spring) concatenada con el rol y el nombre de ese rol
         //Acá genera los permisos y se los pasa al User
-        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + courtUser.getUserRole().name());
+        GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + userAlkemy.getUserRole().name());
 
         //El Servlet se castea
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -118,15 +111,12 @@ public class UserAlkemyService implements UserDetailsService {
         //Si la sesión no está creada, con true la va a crear
         HttpSession session = attributes.getRequest().getSession(true);
 
-        //session.setAttribute("id", courtUser.getId());
-        session.setAttribute("name", courtUser.getName());
-        session.setAttribute("mail", courtUser.getMail());
-        //session.setAttribute("password", courtUser.getPassword());
-        session.setAttribute("userRol", courtUser.getUserRole().name());
-        session.setAttribute("image", courtUser.getImage());
-        //session.setAttribute("status", courtUser.getStatus());
+        session.setAttribute("name", userAlkemy.getName());
+        session.setAttribute("mail", userAlkemy.getMail());
+        session.setAttribute("userRol", userAlkemy.getUserRole().name());
+        session.setAttribute("image", userAlkemy.getImage());
 
         //le paso las autorizaciones en el collections
-        return new User(courtUser.getMail(), courtUser.getPassword(), Collections.singletonList(authority));
+        return new User(userAlkemy.getMail(), userAlkemy.getPassword(), Collections.singletonList(authority));
     }
 }

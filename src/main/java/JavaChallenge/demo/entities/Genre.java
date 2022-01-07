@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Entity
@@ -18,9 +20,11 @@ public class Genre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @NotBlank(message = "El nombre es obligatorio")
     @Column(nullable = false)
     private String name;
 
+    @NotEmpty(message = "La lista no puede estar vacía")
     @OneToMany(mappedBy="genre")
     @JsonIgnore
     private List<Movie> movie;

@@ -32,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 //se establecen rutas disponibles para cualquier usuario
-                .antMatchers("/index").permitAll()
+                .antMatchers("/auth", "/register", "/IMAGE").permitAll()
 
                 .antMatchers("/**").permitAll()
                 .and()

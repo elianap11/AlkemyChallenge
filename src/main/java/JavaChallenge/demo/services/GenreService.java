@@ -15,16 +15,11 @@ public class GenreService {
     @Autowired
     private GenreRepository genreRepository;
 
-    public void createGenre(String name, List<Movie> movie, String image){
 
-        Genre genre = new Genre();
-
-        genre.setName(name);
-        genre.setMovie(movie);
-        genre.setImage(image);
+    public Genre createGenre(Genre genre) {
         genre.setStatus(true);
-
         genreRepository.save(genre);
+        return genre;
     }
 
     @Transactional
@@ -34,18 +29,18 @@ public class GenreService {
     }
 
     @Transactional
-    public void delete(Integer id){
+    public void delete(Integer id) {
         genreRepository.deleteById(id);
     }
 
     @Transactional
-    public void enable(Integer id){
+    public void enable(Integer id) {
         genreRepository.enable(id);
     }
 
     @Transactional
-    public void showGenre(){
-        genreRepository.findAll();
+    public List<Genre> showGenre() {
+        return genreRepository.findAll();
     }
 
 }
