@@ -1,5 +1,6 @@
 package JavaChallenge.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
@@ -21,6 +22,7 @@ public class Genre {
     private String name;
 
     @OneToMany(mappedBy="genre")
+    @JsonIgnore
     private List<Movie> movie;
 
     private String image;

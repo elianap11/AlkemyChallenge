@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,19 +21,10 @@ public class MovieService {
     private MovieRepository movieRepository;
 
     @Transactional
-    public void createMovie(String title, LocalDate creationDate, Integer rate, List<CharacterMovie> characterMovies, Genre genre, String image, Boolean Status) {
-
-        Movie movie = new Movie();
-
-        movie.setTitle(title);
-        movie.setCreationDate(creationDate);
-        movie.setRate(rate);
-        movie.setCharacterMovieList(characterMovies);
-        movie.setGenre(genre);
-        movie.setImage(image);
+    public Movie createMovie(Movie movie) {
         movie.setStatus(true);
-
         movieRepository.save(movie);
+        return movie;
     }
 
     @Transactional
@@ -67,16 +59,15 @@ public class MovieService {
     }
 
     @Transactional
-    public List<Movie> filterByGenre(String genre){
+    public List<Movie> filterByGenre(Integer genre){
         return movieRepository.filterByGenre(genre);
     }
 
-    //Ordenar
-  /*  @Transactional
-    public List<Movie> showFilterMovies(){
+    @Transactional
+    public List<Object[]> showFilterMovies(){
         return movieRepository.showFilterMovies();
     }
-*/
+
 
     @Transactional
     public List<Movie> filterByOrder(String order) {
@@ -88,5 +79,8 @@ public class MovieService {
             return movieRepository.findAll();
         }
     }
+
+
+
 
 }

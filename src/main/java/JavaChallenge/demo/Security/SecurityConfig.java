@@ -32,9 +32,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 //se establecen rutas disponibles para cualquier usuario
-                .antMatchers("/index", "/signup", "/registration", "/CSS/*", "/IMG/*", "/UPLOAD/*", "/js/*").permitAll()
-                /* t odo lo demás debe estar autenticado  */
-                .antMatchers("/**").authenticated()
+                .antMatchers("/index").permitAll()
+
+                .antMatchers("/**").permitAll()
                 .and()
                 //esta es la configuración para el login
                 .formLogin()
