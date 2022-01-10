@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.view.RedirectView;
+
 
 import javax.validation.Valid;
 import java.util.List;
@@ -22,6 +22,8 @@ public class CharacterMovieController {
 
     @Autowired
     private PhotoService photoService;
+
+    private CharacterMovie characterMovie;
 
     //Le puse List<Object[]>
     @GetMapping
@@ -55,15 +57,9 @@ public class CharacterMovieController {
         return characterMovieService.findByMovie(id);
     }
 
-
     @PostMapping("/save")
-    public CharacterMovie saveCharacterMovie(/*@RequestParam("image") MultipartFile photo*/ @RequestBody CharacterMovie characterMovie, BindingResult result) {
-    /*    if (!photo.isEmpty()) {
-            characterMovie.setImage(photoService.copyPhoto(photo));
-        }*/
-
-
-        return characterMovieService.createCharacterMovie(characterMovie);
+    public CharacterMovie saveCharacterMovie (@Valid @ModelAttribute CharacterMovie characterMovie,  BindingResult result, @RequestParam(value = "image") MultipartFile photo) throws Exception{
+        return characterMovieService.createCharacterMovie(characterMovie, photo);
     }
 
     @DeleteMapping(path = "delete/{id}")

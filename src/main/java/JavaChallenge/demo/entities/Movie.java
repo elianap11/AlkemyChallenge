@@ -1,6 +1,5 @@
 package JavaChallenge.demo.entities;
 
-
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;

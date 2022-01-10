@@ -5,10 +5,13 @@ import JavaChallenge.demo.entities.Movie;
 import JavaChallenge.demo.services.GenreService;
 import JavaChallenge.demo.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/genres")
@@ -20,26 +23,31 @@ public class GenreController {
     @Autowired
     private PhotoService photoService;
 
-    @GetMapping
+    @GetMapping("/all")
     public List<Genre> getAll() {
         return genreService.showGenre();
     }
 
     @PostMapping("/save")
-    public Genre saveGenre(@RequestBody Genre genre, MultipartFile photo) throws Exception{
-      /*  if (!photo.isEmpty()) {
+    public Genre saveGenre(@Valid @ModelAttribute Genre genre, BindingResult result, @RequestParam (value = "image") MultipartFile photo) throws Exception {
+        if (!photo.isEmpty()) {
             genre.setImage(photoService.copyPhoto(photo));
-        }*/
-        return genreService.createGenre(genre);
+        }
+        return genreService.createGenre(genre, photo);
+    }
+
+    @GetMapping("/{id}")
+    public Optional<Genre> getById(@PathVariable("id") Integer id) {
+        return genreService.findById(id);
     }
 
     @DeleteMapping(path = "delete/{id}")
-    public String deleteGenre(@PathVariable("id") Integer id){
+    public String deleteGenre(@PathVariable("id") Integer id) {
         try {
             genreService.delete(id);
-            return "La película "+id+" fue eliminada";
+            return "La película " + id + " fue eliminada";
         } catch (Exception e) {
-            return "La película "+id+" no existe";
+            return "La película " + id + " no existe";
         }
     }
 

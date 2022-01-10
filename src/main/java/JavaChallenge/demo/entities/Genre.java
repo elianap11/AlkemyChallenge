@@ -21,13 +21,12 @@ public class Genre {
     private Integer id;
 
     @NotBlank(message = "El nombre es obligatorio")
-    @Column(nullable = false)
     private String name;
 
-    @NotEmpty(message = "La lista no puede estar vacía")
+    //@NotEmpty(message = "La lista no puede estar vacía")
     @OneToMany(mappedBy="genre")
     @JsonIgnore
-    private List<Movie> movie;
+    private List<Movie> movieList;
 
     private String image;
 
@@ -36,10 +35,10 @@ public class Genre {
     public Genre() {
     }
 
-    public Genre(Integer id, String name, List<Movie> movie, String image, Boolean status) {
+    public Genre(Integer id, String name, List<Movie> movieList, String image, Boolean status) {
         this.id = id;
         this.name = name;
-        this.movie = movie;
+        this.movieList = movieList;
         this.image = image;
         this.status = status;
     }

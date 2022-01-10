@@ -4,9 +4,11 @@ import JavaChallenge.demo.entities.Movie;
 import JavaChallenge.demo.services.MovieService;
 import JavaChallenge.demo.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,11 +53,11 @@ public class MovieController {
     }
 
     @PostMapping("/save")
-    public Movie saveMovie(@RequestBody Movie movie, MultipartFile photo) throws Exception{
+    public Movie saveMovie(@Valid @ModelAttribute Movie movie, BindingResult result, @RequestParam (value = "image") MultipartFile photo) throws Exception{
         if (!photo.isEmpty()) {
             movie.setImage(photoService.copyPhoto(photo));
         }
-       return movieService.createMovie(movie);
+       return movieService.createMovie(movie, photo);
     }
 
     @DeleteMapping(path = "delete/{id}")

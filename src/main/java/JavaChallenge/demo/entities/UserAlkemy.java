@@ -20,15 +20,13 @@ public class UserAlkemy {
     private Integer id;
 
     @NotBlank(message = "El nombre es obligatorio")
-    @Column(nullable = false)
     private String name;
 
-    @NotBlank(message = "El correo es obligatorio")
-    @Email(message = "El formato de email debe ser válido")
-    @Column(nullable = false, unique = true)
+    @Email(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", message = "El formato de email debe ser válido")
+    @Column(unique = true)
     private String mail;
 
-    @NotBlank(message = "La clave es obligatorio")
     @Column(nullable = false)
     private String password;
 

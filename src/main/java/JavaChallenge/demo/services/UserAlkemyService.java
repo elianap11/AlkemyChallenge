@@ -17,6 +17,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.management.relation.Role;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collections;
@@ -41,9 +42,9 @@ public class UserAlkemyService implements UserDetailsService {
     private final String message = "No existe un usuario registrado con el correo %s";
 
     @Transactional
-    public UserAlkemy createUser(UserAlkemy userAlkemy, MultipartFile photo) throws Exception, IOException {
+    public void createUser(UserAlkemy userAlkemy, MultipartFile photo) throws Exception, IOException {
 
-        //userAlkemy.setPassword(encoder.encode(password));
+        userAlkemy.setPassword(encoder.encode(userAlkemy.getPassword()));
 
         if (userAlkemyRepository.findAll().isEmpty()) {
             userAlkemy.setUserRole(UserRole.ADMIN);
@@ -51,12 +52,13 @@ public class UserAlkemyService implements UserDetailsService {
             userAlkemy.setUserRole(UserRole.USER);
         }
 
-       // if (!photo.isEmpty()) userAlkemy.setImage(photoService.copyPhoto(photo));
+        if (!photo.isEmpty()) {
+            userAlkemy.setImage(photoService.copyPhoto(photo));
+        }
+        userAlkemy.setStatus(true);
 
-        //userAlkemy.setStatus(true);
-
-        return userAlkemyRepository.save(userAlkemy);
-        //emailService.sendThread(mail);
+        userAlkemyRepository.save(userAlkemy);
+        emailService.sendThread(userAlkemy.getMail());
 
     }
 
@@ -95,6 +97,8 @@ public class UserAlkemyService implements UserDetailsService {
         userAlkemyRepository.deleteById(id);
     }
 
+
+
     @Override
     //Este método entra en juego cuando el usuario se loguea
     public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
@@ -119,4 +123,6 @@ public class UserAlkemyService implements UserDetailsService {
         //le paso las autorizaciones en el collections
         return new User(userAlkemy.getMail(), userAlkemy.getPassword(), Collections.singletonList(authority));
     }
+
+
 }

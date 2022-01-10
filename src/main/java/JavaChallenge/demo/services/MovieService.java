@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -20,8 +21,14 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Autowired
+    private PhotoService photoService;
+
     @Transactional
-    public Movie createMovie(Movie movie) {
+    public Movie createMovie(Movie movie, MultipartFile photo) throws Exception {
+        if (!photo.isEmpty()) {
+            movie.setImage(photoService.copyPhoto(photo));
+        }
         movie.setStatus(true);
         movieRepository.save(movie);
         return movie;

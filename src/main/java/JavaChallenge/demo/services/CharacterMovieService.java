@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.Multipart;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,8 +19,17 @@ public class CharacterMovieService {
     @Autowired
     private CharacterMovieRepository characterMovieRepository;
 
+    @Autowired
+    private PhotoService photoService;
+
+
     @Transactional
-    public CharacterMovie createCharacterMovie(CharacterMovie characterMovie) {
+    public CharacterMovie createCharacterMovie(CharacterMovie characterMovie, MultipartFile photo) throws Exception{
+        if (!photo.isEmpty()) {
+            characterMovie.setImage(photoService.copyPhoto(photo));
+        }
+
+        characterMovie.setStatus(true);
         return characterMovieRepository.save(characterMovie);
     }
 
