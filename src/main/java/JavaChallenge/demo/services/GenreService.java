@@ -38,10 +38,8 @@ public class GenreService {
 
     @Transactional
     public Optional<Genre> findById(Integer id) {
-
         return genreRepository.findById(id);
     }
-
 
     @Transactional
     public void delete(Integer id) {

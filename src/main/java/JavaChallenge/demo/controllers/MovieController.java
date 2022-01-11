@@ -57,7 +57,7 @@ public class MovieController {
         if (!photo.isEmpty()) {
             movie.setImage(photoService.copyPhoto(photo));
         }
-       return movieService.createMovie(movie, photo);
+       return movieService.createMovie(movie);
     }
 
     @DeleteMapping(path = "delete/{id}")

@@ -1,5 +1,6 @@
 package JavaChallenge.demo.Security;
 
+
 import JavaChallenge.demo.services.UserAlkemyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -32,8 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 //se establecen rutas disponibles para cualquier usuario
-                .antMatchers("/auth", "/register", "static", "/IMG", "/UPLOAD").permitAll()
-
+                .antMatchers("/auth", "/register", "/UPLOAD/*").permitAll()
+                /* t odo lo demás debe estar autenticado  */
                 .antMatchers("/**").permitAll()
                 .and()
                 //esta es la configuración para el login

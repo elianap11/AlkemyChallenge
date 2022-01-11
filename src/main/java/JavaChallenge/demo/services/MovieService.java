@@ -25,13 +25,9 @@ public class MovieService {
     private PhotoService photoService;
 
     @Transactional
-    public Movie createMovie(Movie movie, MultipartFile photo) throws Exception {
-        if (!photo.isEmpty()) {
-            movie.setImage(photoService.copyPhoto(photo));
-        }
+    public Movie createMovie(Movie movie) throws Exception {
         movie.setStatus(true);
-        movieRepository.save(movie);
-        return movie;
+        return movieRepository.save(movie);
     }
 
     @Transactional
@@ -86,8 +82,5 @@ public class MovieService {
             return movieRepository.findAll();
         }
     }
-
-
-
 
 }

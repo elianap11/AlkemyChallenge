@@ -115,10 +115,10 @@ public class UserAlkemyService implements UserDetailsService {
         //Si la sesión no está creada, con true la va a crear
         HttpSession session = attributes.getRequest().getSession(true);
 
-        session.setAttribute("name", userAlkemy.getName());
+        //session.setAttribute("name", userAlkemy.getName());
         session.setAttribute("mail", userAlkemy.getMail());
-        session.setAttribute("userRol", userAlkemy.getUserRole().name());
-        session.setAttribute("image", userAlkemy.getImage());
+        //session.setAttribute("userRol", userAlkemy.getUserRole().name());
+        //session.setAttribute("image", userAlkemy.getImage());
 
         //le paso las autorizaciones en el collections
         return new User(userAlkemy.getMail(), userAlkemy.getPassword(), Collections.singletonList(authority));

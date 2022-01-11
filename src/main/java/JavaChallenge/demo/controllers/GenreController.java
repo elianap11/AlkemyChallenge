@@ -1,7 +1,6 @@
 package JavaChallenge.demo.controllers;
 
 import JavaChallenge.demo.entities.Genre;
-import JavaChallenge.demo.entities.Movie;
 import JavaChallenge.demo.services.GenreService;
 import JavaChallenge.demo.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +22,7 @@ public class GenreController {
     @Autowired
     private PhotoService photoService;
 
-    @GetMapping("/all")
+    @GetMapping
     public List<Genre> getAll() {
         return genreService.showGenre();
     }
@@ -45,9 +44,9 @@ public class GenreController {
     public String deleteGenre(@PathVariable("id") Integer id) {
         try {
             genreService.delete(id);
-            return "La película " + id + " fue eliminada";
+            return "El género " + id + " fue eliminado";
         } catch (Exception e) {
-            return "La película " + id + " no existe";
+            return "El género " + id + " no existe";
         }
     }
 
@@ -55,9 +54,9 @@ public class GenreController {
     public String enable(@PathVariable("id") Integer id) {
         try {
             genreService.enable(id);
-            return "El personaje " + id + " fue habilitado";
+            return "El género " + id + " fue habilitado";
         } catch (Exception e) {
-            return "El personaje " + id + " no existe";
+            return "El género " + id + " no existe";
         }
     }
 

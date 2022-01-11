@@ -25,7 +25,6 @@ public class CharacterMovieController {
 
     private CharacterMovie characterMovie;
 
-    //Le puse List<Object[]>
     @GetMapping
     public List<Object[]> showListCharacterMovie() {
         return characterMovieService.showListCharacterMovie();
@@ -52,7 +51,7 @@ public class CharacterMovieController {
     }
 
     //REVISAR
-    @GetMapping(value = "", params = "id")
+    @GetMapping(params = "id")
     public List<CharacterMovie> findByMovie(@RequestParam("id") Integer id) {
         return characterMovieService.findByMovie(id);
     }
