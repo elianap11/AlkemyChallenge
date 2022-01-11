@@ -42,8 +42,8 @@ public class MovieService {
     }
 
     @Transactional
-    public Optional<Movie> findById(Integer id){
-        return movieRepository.findById(id);
+    public Optional<Movie> findById(Integer idMovie){
+        return movieRepository.findById(idMovie);
     }
 
     @Transactional

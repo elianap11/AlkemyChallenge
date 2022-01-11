@@ -3,13 +3,14 @@ package JavaChallenge.demo.services;
 import JavaChallenge.demo.entities.CharacterMovie;
 import JavaChallenge.demo.entities.Movie;
 import JavaChallenge.demo.repositories.CharacterMovieRepository;
+import JavaChallenge.demo.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.mail.Multipart;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,6 +22,12 @@ public class CharacterMovieService {
 
     @Autowired
     private PhotoService photoService;
+
+    @Autowired
+    private MovieService movieService;
+
+    @Autowired
+    private MovieRepository movieRepository;
 
 
     @Transactional
@@ -70,16 +77,29 @@ public class CharacterMovieService {
         return characterMovieRepository.findByAge(age);
     }
 
-    @Transactional
-    public List<CharacterMovie> findByMovie(Integer id) {
-        return characterMovieRepository.findByMovie(id);
-    }
 
     @Transactional
     public Optional<CharacterMovie> findById(Integer id) {
         return characterMovieRepository.findById(id);
     }
 
-    ;
+    @Transactional
+    public List<CharacterMovie> findAllByIdMovie(Integer idMovie) throws Exception {
+        try {
+            Movie movie = movieRepository.findById(idMovie).get();
+            if (movie == null){
+                throw new Exception("No se encontró una película con este id");
+            }
+            List<CharacterMovie> charactersListByMovie = movie.getCharacterMovieList();
+            if (!charactersListByMovie.isEmpty()) {
+                return charactersListByMovie;
+            } else {
+                throw new Exception("No se encontraron personajes relacionados a esta película");
+            }
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
+
 
 }

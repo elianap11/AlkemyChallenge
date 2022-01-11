@@ -13,8 +13,8 @@ import java.util.List;
 public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     @Modifying
-    @Query("UPDATE Movie f SET f.status = true WHERE f.id = :id")
-    void enable(@Param("id") Integer id);
+    @Query("UPDATE Movie f SET f.status = true WHERE f.idMovie = :idMovie")
+    void enable(@Param("idMovie") Integer idMovie);
 
     @Query(value = "SELECT * FROM movie WHERE title LIKE '%' ? '%'", nativeQuery = true)
     List<Movie> findByTitle(String title);

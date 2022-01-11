@@ -1,15 +1,19 @@
 package JavaChallenge.demo.controllers;
 
 import JavaChallenge.demo.entities.CharacterMovie;
+import JavaChallenge.demo.entities.Movie;
 import JavaChallenge.demo.services.CharacterMovieService;
 import JavaChallenge.demo.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,10 +54,14 @@ public class CharacterMovieController {
         return characterMovieService.findByAge(age);
     }
 
-    //REVISAR
-    @GetMapping(params = "id")
-    public List<CharacterMovie> findByMovie(@RequestParam("id") Integer id) {
-        return characterMovieService.findByMovie(id);
+
+    @RequestMapping(value ="", params = "movies", method = RequestMethod.GET)
+    public ResponseEntity<?> findByIdMovie(@RequestParam("movies") Integer idMovie) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(characterMovieService.findAllByIdMovie(idMovie));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"Error. " + e.getMessage() + ".\"}");
+        }
     }
 
     @PostMapping("/save")

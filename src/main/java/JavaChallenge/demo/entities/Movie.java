@@ -17,7 +17,7 @@ public class Movie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Integer idMovie;
 
     @NotBlank(message = "El título es obligatorio")
     @Column(nullable = false)
@@ -48,8 +48,8 @@ public class Movie {
     public Movie() {
     }
 
-    public Movie(Integer id, String title, LocalDate creationDate, Integer rate, List<CharacterMovie> characterMovieList, Genre genre, String image, Boolean status) {
-        this.id = id;
+    public Movie(Integer idMovie, String title, LocalDate creationDate, Integer rate, List<CharacterMovie> characterMovieList, Genre genre, String image, Boolean status) {
+        this.idMovie = idMovie;
         this.title = title;
         this.creationDate = creationDate;
         this.rate = rate;

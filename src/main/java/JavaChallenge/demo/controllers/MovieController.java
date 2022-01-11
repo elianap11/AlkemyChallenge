@@ -32,9 +32,9 @@ public class MovieController {
         return movieService.findAll();
     }
 
-    @GetMapping("/{id}")
-    public Optional<Movie> getById(@PathVariable("id") Integer id) {
-        return movieService.findById(id);
+    @GetMapping("/{idMovie}")
+    public Optional<Movie> getById(@PathVariable("idMovie") Integer idMovie) {
+        return movieService.findById(idMovie);
     }
 
     @GetMapping(params = "title")
@@ -60,23 +60,23 @@ public class MovieController {
        return movieService.createMovie(movie);
     }
 
-    @DeleteMapping(path = "delete/{id}")
-    public String deleteMovie(@PathVariable("id") Integer id){
+    @DeleteMapping(path = "delete/{idMovie}")
+    public String deleteMovie(@PathVariable("idMovie") Integer idMovie){
         try {
-            movieService.delete(id);
-            return "La película "+id+" fue eliminada";
+            movieService.delete(idMovie);
+            return "La película "+idMovie+" fue eliminada";
         } catch (Exception e) {
-            return "La película "+id+" no existe";
+            return "La película "+idMovie+" no existe";
         }
     }
 
-    @GetMapping(path = "enable/{id}")
-    public String enable(@PathVariable("id") Integer id) {
+    @GetMapping(path = "enable/{idMovie}")
+    public String enable(@PathVariable("idMovie") Integer idMovie) {
         try {
-            movieService.enable(id);
-            return "El personaje " + id + " fue habilitado";
+            movieService.enable(idMovie);
+            return "El personaje " + idMovie + " fue habilitado";
         } catch (Exception e) {
-            return "El personaje " + id + " no existe";
+            return "El personaje " + idMovie + " no existe";
         }
     }
 
