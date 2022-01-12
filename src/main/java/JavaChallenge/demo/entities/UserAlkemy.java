@@ -6,11 +6,12 @@ import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Setter
 @Getter
-
 @SQLDelete(sql = "UPDATE UserAlkemy SET status = false WHERE id = ?")
 public class UserAlkemy {
 
@@ -18,10 +19,12 @@ public class UserAlkemy {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @NotBlank(message = "El nombre es obligatorio")
     private String name;
 
-    @Column(nullable = false, unique = true)
+    @Email(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
+            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", message = "El formato de email debe ser válido")
+    @Column(unique = true)
     private String mail;
 
     @Column(nullable = false)
@@ -34,4 +37,17 @@ public class UserAlkemy {
     private String image;
 
     private Boolean status;
+
+    public UserAlkemy() {
+    }
+
+    public UserAlkemy(Integer id, String name, String mail, String password, UserRole userRole, String image, Boolean status) {
+        this.id = id;
+        this.name = name;
+        this.mail = mail;
+        this.password = password;
+        this.userRole = userRole;
+        this.image = image;
+        this.status = status;
+    }
 }

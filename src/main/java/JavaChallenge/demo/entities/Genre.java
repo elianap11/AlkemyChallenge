@@ -1,10 +1,13 @@
 package JavaChallenge.demo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Entity
@@ -17,11 +20,13 @@ public class Genre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false)
+    @NotBlank(message = "El nombre es obligatorio")
     private String name;
 
+    //@NotEmpty(message = "La lista no puede estar vacía")
     @OneToMany(mappedBy="genre")
-    private List<Movie> movie;
+    @JsonIgnore
+    private List<Movie> movieList;
 
     private String image;
 
@@ -30,10 +35,10 @@ public class Genre {
     public Genre() {
     }
 
-    public Genre(Integer id, String name, List<Movie> movie, String image, Boolean status) {
+    public Genre(Integer id, String name, List<Movie> movieList, String image, Boolean status) {
         this.id = id;
         this.name = name;
-        this.movie = movie;
+        this.movieList = movieList;
         this.image = image;
         this.status = status;
     }

@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,20 +21,13 @@ public class MovieService {
     @Autowired
     private MovieRepository movieRepository;
 
+    @Autowired
+    private PhotoService photoService;
+
     @Transactional
-    public void createMovie(String title, LocalDate creationDate, Integer rate, List<CharacterMovie> characterMovies, Genre genre, String image, Boolean Status) {
-
-        Movie movie = new Movie();
-
-        movie.setTitle(title);
-        movie.setCreationDate(creationDate);
-        movie.setRate(rate);
-        movie.setCharacterMovieList(characterMovies);
-        movie.setGenre(genre);
-        movie.setImage(image);
+    public Movie createMovie(Movie movie) throws Exception {
         movie.setStatus(true);
-
-        movieRepository.save(movie);
+        return movieRepository.save(movie);
     }
 
     @Transactional
@@ -47,8 +42,8 @@ public class MovieService {
     }
 
     @Transactional
-    public Optional<Movie> findById(Integer id){
-        return movieRepository.findById(id);
+    public Optional<Movie> findById(Integer idMovie){
+        return movieRepository.findById(idMovie);
     }
 
     @Transactional
@@ -67,16 +62,15 @@ public class MovieService {
     }
 
     @Transactional
-    public List<Movie> filterByGenre(String genre){
+    public List<Movie> filterByGenre(Integer genre){
         return movieRepository.filterByGenre(genre);
     }
 
-    //Ordenar
-  /*  @Transactional
-    public List<Movie> showFilterMovies(){
+    @Transactional
+    public List<Object[]> showFilterMovies(){
         return movieRepository.showFilterMovies();
     }
-*/
+
 
     @Transactional
     public List<Movie> filterByOrder(String order) {

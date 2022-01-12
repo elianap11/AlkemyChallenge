@@ -1,13 +1,16 @@
 package JavaChallenge.demo.services;
 
+import JavaChallenge.demo.entities.CharacterMovie;
 import JavaChallenge.demo.entities.Movie;
 import JavaChallenge.demo.entities.Genre;
 import JavaChallenge.demo.repositories.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class GenreService {
@@ -15,16 +18,16 @@ public class GenreService {
     @Autowired
     private GenreRepository genreRepository;
 
-    public void createGenre(String name, List<Movie> movie, String image){
+    @Autowired
+    private PhotoService photoService;
 
-        Genre genre = new Genre();
-
-        genre.setName(name);
-        genre.setMovie(movie);
-        genre.setImage(image);
+    public Genre createGenre(Genre genre, MultipartFile photo) throws Exception {
+        if (!photo.isEmpty()) {
+            genre.setImage(photoService.copyPhoto(photo));
+        }
         genre.setStatus(true);
-
         genreRepository.save(genre);
+        return genre;
     }
 
     @Transactional
@@ -34,18 +37,23 @@ public class GenreService {
     }
 
     @Transactional
-    public void delete(Integer id){
+    public Optional<Genre> findById(Integer id) {
+        return genreRepository.findById(id);
+    }
+
+    @Transactional
+    public void delete(Integer id) {
         genreRepository.deleteById(id);
     }
 
     @Transactional
-    public void enable(Integer id){
+    public void enable(Integer id) {
         genreRepository.enable(id);
     }
 
     @Transactional
-    public void showGenre(){
-        genreRepository.findAll();
+    public List<Genre> showGenre() {
+        return genreRepository.findAll();
     }
 
 }

@@ -2,9 +2,16 @@ package JavaChallenge.demo.controllers;
 
 import JavaChallenge.demo.entities.CharacterMovie;
 import JavaChallenge.demo.services.CharacterMovieService;
+import JavaChallenge.demo.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,17 +19,18 @@ import java.util.Optional;
 @RequestMapping("/characters")
 public class CharacterMovieController {
 
-
     @Autowired
     private CharacterMovieService characterMovieService;
 
-
-   /* @GetMapping
-    public List<CharacterMovie> showListCharacterMovie() {
-        return characterMovieService.showListCharacterMovie();
-    }*/
+    @Autowired
+    private PhotoService photoService;
 
     @GetMapping
+    public List<Object[]> showListCharacterMovie() {
+        return characterMovieService.showListCharacterMovie();
+    }
+
+    @GetMapping("/all")
     public List<CharacterMovie> findAll() {
         return characterMovieService.findAll();
     }
@@ -42,9 +50,38 @@ public class CharacterMovieController {
         return characterMovieService.findByAge(age);
     }
 
-    @GetMapping(params = "movies")
-    public List<CharacterMovie> findByMovies(@RequestParam("movie") String movie) {
-        return characterMovieService.findByMovies(movie);
+    @RequestMapping(value ="", params = "movies", method = RequestMethod.GET)
+    public ResponseEntity<?> findByIdMovie(@RequestParam("movies") Integer idMovie) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(characterMovieService.findAllByIdMovie(idMovie));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"Error. " + e.getMessage() + ".\"}");
+        }
+    }
+
+    @PostMapping("/save")
+    public CharacterMovie saveCharacterMovie (@Valid @ModelAttribute CharacterMovie characterMovie,  BindingResult result, @RequestParam(value = "image") MultipartFile photo) throws Exception{
+        return characterMovieService.createCharacterMovie(characterMovie, photo);
+    }
+
+    @DeleteMapping(path = "delete/{id}")
+    public String deleteCharacter(@PathVariable("id") Integer id){
+        try {
+            characterMovieService.delete(id);
+            return "El personaje "+id+" fue eliminado";
+        } catch (Exception e) {
+            return "El personaje "+id+" no existe";
+        }
+    }
+
+    @GetMapping(path = "enable/{id}")
+    public String enable(@PathVariable("id") Integer id){
+        try {
+            characterMovieService.enable(id);
+            return "El personaje "+id+" fue habilitado";
+        } catch (Exception e) {
+            return "El personaje "+id+" no existe";
+        }
     }
 
 }
