@@ -21,4 +21,7 @@ public interface UserAlkemyRepository extends JpaRepository<UserAlkemy, Integer>
     @Query("UPDATE UserAlkemy u SET u.status = true WHERE u.id = :id")
     void enable(@Param("id") Integer id);
 
+    @Query(value = "SELECT * FROM disney_users u WHERE u.mail = :user AND u.password = :psw", nativeQuery = true)
+    Optional<UserAlkemy> findByUserAndPsw(@Param("user") String usuario, @Param("psw") String contrasena);
+
 }

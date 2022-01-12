@@ -42,7 +42,7 @@ public class UserAlkemyService implements UserDetailsService {
     private final String message = "No existe un usuario registrado con el correo %s";
 
     @Transactional
-    public void createUser(UserAlkemy userAlkemy, MultipartFile photo) throws Exception, IOException {
+    public UserAlkemy createUser(UserAlkemy userAlkemy, MultipartFile photo) throws Exception, IOException {
 
         userAlkemy.setPassword(encoder.encode(userAlkemy.getPassword()));
 
@@ -57,8 +57,9 @@ public class UserAlkemyService implements UserDetailsService {
         }
         userAlkemy.setStatus(true);
 
-        userAlkemyRepository.save(userAlkemy);
         emailService.sendThread(userAlkemy.getMail());
+
+        return userAlkemyRepository.save(userAlkemy);
 
     }
 
@@ -97,6 +98,15 @@ public class UserAlkemyService implements UserDetailsService {
         userAlkemyRepository.deleteById(id);
     }
 
+    @Transactional
+    public UserAlkemy findByUserAndPsw(String usuario, String psw) throws Exception {
+        try {
+            Optional<UserAlkemy> entity = userAlkemyRepository.findByUserAndPsw(usuario, psw);
+            return entity.get();
+        } catch (Exception e) {
+            throw new Exception(e.getMessage());
+        }
+    }
 
 
     @Override

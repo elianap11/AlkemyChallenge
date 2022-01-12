@@ -1,7 +1,6 @@
 package JavaChallenge.demo.controllers;
 
 import JavaChallenge.demo.entities.CharacterMovie;
-import JavaChallenge.demo.entities.Movie;
 import JavaChallenge.demo.services.CharacterMovieService;
 import JavaChallenge.demo.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,8 +24,6 @@ public class CharacterMovieController {
 
     @Autowired
     private PhotoService photoService;
-
-    private CharacterMovie characterMovie;
 
     @GetMapping
     public List<Object[]> showListCharacterMovie() {
@@ -53,7 +49,6 @@ public class CharacterMovieController {
     public List<CharacterMovie> findByAge(@RequestParam("age") Integer age) {
         return characterMovieService.findByAge(age);
     }
-
 
     @RequestMapping(value ="", params = "movies", method = RequestMethod.GET)
     public ResponseEntity<?> findByIdMovie(@RequestParam("movies") Integer idMovie) {
@@ -88,6 +83,5 @@ public class CharacterMovieController {
             return "El personaje "+id+" no existe";
         }
     }
-
 
 }
