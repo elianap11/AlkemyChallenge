@@ -38,10 +38,12 @@ public class UserAlkemy {
 
     private Boolean status;
 
+    private String token;
+
     public UserAlkemy() {
     }
 
-    public UserAlkemy(Integer id, String name, String mail, String password, UserRole userRole, String image, Boolean status) {
+    public UserAlkemy(Integer id, String name, String mail, String password, UserRole userRole, String image, Boolean status, String token) {
         this.id = id;
         this.name = name;
         this.mail = mail;
@@ -49,5 +51,6 @@ public class UserAlkemy {
         this.userRole = userRole;
         this.image = image;
         this.status = status;
+        this.token = token;
     }
 }

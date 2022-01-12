@@ -98,15 +98,15 @@ public class UserAlkemyService implements UserDetailsService {
         userAlkemyRepository.deleteById(id);
     }
 
-    @Transactional
-    public UserAlkemy findByUserAndPsw(String usuario, String psw) throws Exception {
-        try {
-            Optional<UserAlkemy> entity = userAlkemyRepository.findByUserAndPsw(usuario, psw);
-            return entity.get();
+/*    @Transactional
+    public UserAlkemy findByUserAndPsw(String mail, String password) throws Exception{
+        try{
+            Optional<UserAlkemy> userAlkemyOptional = userAlkemyRepository.findByUserAndPsw(mail, password);
+            return userAlkemyOptional.orElse(null);
         } catch (Exception e) {
             throw new Exception(e.getMessage());
         }
-    }
+    }*/
 
 
     @Override
@@ -125,14 +125,11 @@ public class UserAlkemyService implements UserDetailsService {
         //Si la sesión no está creada, con true la va a crear
         HttpSession session = attributes.getRequest().getSession(true);
 
-        //session.setAttribute("name", userAlkemy.getName());
         session.setAttribute("mail", userAlkemy.getMail());
-        //session.setAttribute("userRol", userAlkemy.getUserRole().name());
-        //session.setAttribute("image", userAlkemy.getImage());
+        session.setAttribute("userRol", userAlkemy.getUserRole().name());
 
         //le paso las autorizaciones en el collections
         return new User(userAlkemy.getMail(), userAlkemy.getPassword(), Collections.singletonList(authority));
     }
-
 
 }
