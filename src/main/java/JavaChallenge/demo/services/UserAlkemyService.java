@@ -1,6 +1,6 @@
 package JavaChallenge.demo.services;
 
-import JavaChallenge.demo.Enum.UserRole;
+import JavaChallenge.demo.enums.UserRole;
 import JavaChallenge.demo.entities.UserAlkemy;
 import JavaChallenge.demo.repositories.UserAlkemyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,6 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.management.relation.Role;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.Collections;
@@ -60,7 +59,6 @@ public class UserAlkemyService implements UserDetailsService {
         emailService.sendThread(userAlkemy.getMail());
 
         return userAlkemyRepository.save(userAlkemy);
-
     }
 
     @Transactional
@@ -73,7 +71,7 @@ public class UserAlkemyService implements UserDetailsService {
     }
 
     @Transactional(readOnly = true)
-    public List<UserAlkemy> getUser() {
+    public List<UserAlkemy> getUserAlkemy() {
         return userAlkemyRepository.findAll();
     }
 
@@ -89,47 +87,29 @@ public class UserAlkemyService implements UserDetailsService {
     }
 
     @Transactional
-    public void enable(Integer id) {
+    public void enableUserAlkemy(Integer id) {
         userAlkemyRepository.enable(id);
     }
 
     @Transactional
-    public void delete(Integer id) {
+    public void deleteUserAlkemy(Integer id) {
         userAlkemyRepository.deleteById(id);
     }
 
-/*    @Transactional
-    public UserAlkemy findByUserAndPsw(String mail, String password) throws Exception{
-        try{
-            Optional<UserAlkemy> userAlkemyOptional = userAlkemyRepository.findByUserAndPsw(mail, password);
-            return userAlkemyOptional.orElse(null);
-        } catch (Exception e) {
-            throw new Exception(e.getMessage());
-        }
-    }*/
-
-
     @Override
-    //Este método entra en juego cuando el usuario se loguea
     public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {
-        //chequea que el correo exista: permite el acceso o lanza una excepción
         UserAlkemy userAlkemy = userAlkemyRepository.findByMail(mail)
                 .orElseThrow(() -> new UsernameNotFoundException(String.format(message, mail)));
-        //La palabra ROLE_ (es la forma que reconoce los roles Spring) concatenada con el rol y el nombre de ese rol
-        //Acá genera los permisos y se los pasa al User
+
         GrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + userAlkemy.getUserRole().name());
 
-        //El Servlet se castea
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
 
-        //Si la sesión no está creada, con true la va a crear
         HttpSession session = attributes.getRequest().getSession(true);
 
         session.setAttribute("mail", userAlkemy.getMail());
         session.setAttribute("userRol", userAlkemy.getUserRole().name());
 
-        //le paso las autorizaciones en el collections
         return new User(userAlkemy.getMail(), userAlkemy.getPassword(), Collections.singletonList(authority));
     }
-
 }

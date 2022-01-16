@@ -23,19 +23,16 @@ public class Movie {
     @Column(nullable = false)
     private String title;
 
-    //@NotBlank(message = "La fecha es obligatoria")
     @Column(nullable = false)
     private LocalDate creationDate;
 
     @NotNull(message = "La calificación es obligatoria")
-    @Column
     @Min(value = 1, message = "El valor mínimo es 1")
     @Max(value = 5, message = "El valor máximo es 5")
     private Integer rate;
 
     @ManyToMany
     @JoinTable(name = "rel_movie_character", joinColumns = @JoinColumn (name = "id_movie", nullable = false), inverseJoinColumns = @JoinColumn (name = "id_character", nullable = false))
-    //@NotEmpty(message = "La lista no puede estar vacía")
     private List<CharacterMovie> characterMovieList;
 
     @ManyToOne

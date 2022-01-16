@@ -14,14 +14,10 @@ public interface UserAlkemyRepository extends JpaRepository<UserAlkemy, Integer>
 
     Optional<UserAlkemy> findByMail(String mail);
 
-    // Creación de consulta a partir del nombre de método
     boolean existsByMail(String mail);
 
     @Modifying
     @Query("UPDATE UserAlkemy u SET u.status = true WHERE u.id = :id")
     void enable(@Param("id") Integer id);
-
-   /* @Query(value = "SELECT * FROM user_alkemy WHERE mail = :mail AND password = :password", nativeQuery = true)
-    Optional<UserAlkemy> findByUserAndPsw(@Param("mail") String mail, @Param("password") String password);*/
 
 }

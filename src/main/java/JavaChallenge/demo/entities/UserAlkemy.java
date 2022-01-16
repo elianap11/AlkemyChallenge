@@ -1,6 +1,6 @@
 package JavaChallenge.demo.entities;
 
-import JavaChallenge.demo.Enum.UserRole;
+import JavaChallenge.demo.enums.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
@@ -23,7 +23,8 @@ public class UserAlkemy {
     private String name;
 
     @Email(regexp = "^(?=.{1,64}@)[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*@"
-            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$", message = "El formato de email debe ser válido")
+            + "[^-][A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$",
+            message = "El formato de email debe ser válido")
     @Column(unique = true)
     private String mail;
 
@@ -34,10 +35,13 @@ public class UserAlkemy {
     @Column(nullable = false)
     private UserRole userRole;
 
+    @Column
     private String image;
 
+    @Column
     private Boolean status;
 
+    @Column
     private String token;
 
     public UserAlkemy() {

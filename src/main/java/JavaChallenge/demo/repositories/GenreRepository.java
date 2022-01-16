@@ -12,5 +12,5 @@ public interface GenreRepository extends JpaRepository <Genre, Integer> {
 
     @Modifying
     @Query("UPDATE Genre g SET g.status = true WHERE g.id = :id")
-    void enable(@Param("id") Integer id);
+    void enableGenre(@Param("id") Integer id);
 }

@@ -19,8 +19,6 @@ public class PhotoService {
         try {
             String namePhoto = archive.getOriginalFilename();
             Path pathPhoto = Paths.get(directory, namePhoto).toAbsolutePath();
-            //Files.copy copia la foto, es un método estático
-            //este método getInputStream genera una excepción y dice: si ya existe, no lo copies
             Files.copy(archive.getInputStream(), pathPhoto, StandardCopyOption.REPLACE_EXISTING);
             return namePhoto;
         }catch (IOException e){

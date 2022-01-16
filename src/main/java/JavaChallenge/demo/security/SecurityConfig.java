@@ -1,4 +1,4 @@
-package JavaChallenge.demo.Security;
+package JavaChallenge.demo.security;
 
 
 import JavaChallenge.demo.services.UserAlkemyService;

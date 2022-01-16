@@ -1,4 +1,4 @@
-package JavaChallenge.demo.Config;
+package JavaChallenge.demo.config;
 
 
 import org.springframework.context.annotation.Bean;

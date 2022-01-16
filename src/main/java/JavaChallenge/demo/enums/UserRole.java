@@ -1,4 +1,4 @@
-package JavaChallenge.demo.Enum;
+package JavaChallenge.demo.enums;
 
 public enum UserRole {
     USER, ADMIN

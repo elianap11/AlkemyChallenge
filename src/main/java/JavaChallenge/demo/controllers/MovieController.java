@@ -4,6 +4,7 @@ import JavaChallenge.demo.entities.Movie;
 import JavaChallenge.demo.services.MovieService;
 import JavaChallenge.demo.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,12 +24,12 @@ public class MovieController {
     private PhotoService photoService;
 
     @GetMapping
-    public List<Object[]> showFilterMovies() {
+    public List<Object[]> showMovie() {
         return movieService.showFilterMovies();
     }
 
     @GetMapping("/all")
-    public List<Movie> getAll() {
+    public List<Movie> getMovie() {
         return movieService.findAll();
     }
 
@@ -52,6 +53,7 @@ public class MovieController {
         return movieService.filterByOrder(order);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/save")
     public Movie saveMovie(@Valid @ModelAttribute Movie movie, BindingResult result, @RequestParam (value = "image") MultipartFile photo) throws Exception{
         if (!photo.isEmpty()) {
@@ -60,6 +62,7 @@ public class MovieController {
        return movieService.createMovie(movie);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "delete/{idMovie}")
     public String deleteMovie(@PathVariable("idMovie") Integer idMovie){
         try {
@@ -70,8 +73,9 @@ public class MovieController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "enable/{idMovie}")
-    public String enable(@PathVariable("idMovie") Integer idMovie) {
+    public String enableMovie(@PathVariable("idMovie") Integer idMovie) {
         try {
             movieService.enable(idMovie);
             return "El personaje " + idMovie + " fue habilitado";
@@ -79,16 +83,4 @@ public class MovieController {
             return "El personaje " + idMovie + " no existe";
         }
     }
-
-   /* @PostMapping("/save")
-    public Movie saveMovie(@RequestParam("image") MultipartFile photo, @ModelAttribute Movie movie) throws Exception{
-        if (!photo.isEmpty()) {
-            movie.setImage(photoService.copyPhoto(photo);
-        }
-        movieService.createMovie(movie);
-        return new RedirectView("/movies");
-    }
-        return movieService.createMovie(movie);
-
-    }*/
 }

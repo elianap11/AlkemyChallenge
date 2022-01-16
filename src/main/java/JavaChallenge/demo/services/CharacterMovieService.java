@@ -7,10 +7,8 @@ import JavaChallenge.demo.repositories.MovieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +33,6 @@ public class CharacterMovieService {
         if (!photo.isEmpty()) {
             characterMovie.setImage(photoService.copyPhoto(photo));
         }
-
         characterMovie.setStatus(true);
         return characterMovieRepository.save(characterMovie);
     }
@@ -53,10 +50,9 @@ public class CharacterMovieService {
 
     @Transactional
     public void enable(Integer id) {
-        characterMovieRepository.enable(id);
+        characterMovieRepository.enableCharacterMovie(id);
     }
 
-    //Object[]
     @Transactional
     public List<Object[]> showListCharacterMovie() {
         return characterMovieRepository.showListCharacterMovie();
@@ -76,7 +72,6 @@ public class CharacterMovieService {
     public List<CharacterMovie> findByAge(Integer age) {
         return characterMovieRepository.findByAge(age);
     }
-
 
     @Transactional
     public Optional<CharacterMovie> findById(Integer id) {
@@ -100,6 +95,4 @@ public class CharacterMovieService {
             throw new Exception(e.getMessage());
         }
     }
-
-
 }

@@ -6,6 +6,7 @@ import JavaChallenge.demo.services.PhotoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,12 +27,12 @@ public class CharacterMovieController {
     private PhotoService photoService;
 
     @GetMapping
-    public List<Object[]> showListCharacterMovie() {
+    public List<Object[]> showCharacterMovie() {
         return characterMovieService.showListCharacterMovie();
     }
 
     @GetMapping("/all")
-    public List<CharacterMovie> findAll() {
+    public List<CharacterMovie> getCharacterMovie() {
         return characterMovieService.findAll();
     }
 
@@ -59,13 +60,15 @@ public class CharacterMovieController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/save")
     public CharacterMovie saveCharacterMovie (@Valid @ModelAttribute CharacterMovie characterMovie,  BindingResult result, @RequestParam(value = "image") MultipartFile photo) throws Exception{
         return characterMovieService.createCharacterMovie(characterMovie, photo);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "delete/{id}")
-    public String deleteCharacter(@PathVariable("id") Integer id){
+    public String deleteCharacterMovie(@PathVariable("id") Integer id){
         try {
             characterMovieService.delete(id);
             return "El personaje "+id+" fue eliminado";
@@ -74,8 +77,9 @@ public class CharacterMovieController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "enable/{id}")
-    public String enable(@PathVariable("id") Integer id){
+    public String enableCharacterMovie(@PathVariable("id") Integer id){
         try {
             characterMovieService.enable(id);
             return "El personaje "+id+" fue habilitado";
@@ -83,5 +87,4 @@ public class CharacterMovieController {
             return "El personaje "+id+" no existe";
         }
     }
-
 }

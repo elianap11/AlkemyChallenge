@@ -18,10 +18,9 @@ public interface CharacterMovieRepository extends JpaRepository<CharacterMovie, 
 
     @Modifying
     @Query("UPDATE CharacterMovie c SET c.status = true WHERE c.id = :id")
-    void enable(@Param("id") Integer id);
+    void enableCharacterMovie(@Param("id") Integer id);
 
     List<CharacterMovie> findByName(String name);
 
     List<CharacterMovie> findByAge(Integer age);
-
 }

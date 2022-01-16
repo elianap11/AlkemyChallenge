@@ -29,14 +29,13 @@ public class UserAlkemyController {
 
     private UserAlkemy userAlkemy;
 
-
     @PostMapping("/login")
-    public ResponseEntity<?> loginUser(@Valid @ModelAttribute UserAlkemy userAlkemy, BindingResult result) throws Exception {
+    public ResponseEntity<?> loginUserAlkemy(@Valid @ModelAttribute UserAlkemy userAlkemy, BindingResult result) throws Exception {
         try {
             if (userAlkemy != null) {
-                UserDetails user1 = userAlkemyService.loadUserByUsername(userAlkemy.getMail());
-                if (user1 == null) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"Error. No se encontró un usuario registrado con ese nombre y contraseña .\"}");
+                UserDetails userAlkemyDetails = userAlkemyService.loadUserByUsername(userAlkemy.getMail());
+                if (userAlkemyDetails == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error. No se encontró un usuario registrado con ese correo");
                 }
                 String token = getJWTToken(userAlkemy.getMail());
                 userAlkemy.setToken(token);
@@ -49,23 +48,22 @@ public class UserAlkemyController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @ModelAttribute UserAlkemy userAlkemy, BindingResult result, @RequestParam(value = "image") MultipartFile photo) {
+    public ResponseEntity<?> registerUserAlkemy(@Valid @ModelAttribute UserAlkemy userAlkemy, BindingResult result, @RequestParam(value = "image") MultipartFile photo) {
         try {
-            List<UserAlkemy> usuarios = userAlkemyService.getUser();
-            for (UserAlkemy u : usuarios) {
+            List<UserAlkemy> usersAlkemy = userAlkemyService.getUserAlkemy();
+            for (UserAlkemy u : usersAlkemy) {
                 if (u.getMail().equals(userAlkemy.getMail())) {
-                    return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body("Ya se encuentra registrado un usuario con ese nombre");
+                    return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body("Ya se encuentra registrado un usuario con ese correo");
                 }
             }
-            UserAlkemy usuario = userAlkemyService.createUser(userAlkemy, photo);
+            UserAlkemy userAlkemyToken = userAlkemyService.createUser(userAlkemy, photo);
             String token = getJWTToken(userAlkemy.getMail());
-            usuario.setToken(token);
-            return ResponseEntity.status(HttpStatus.OK).body(usuario);
+            userAlkemyToken.setToken(token);
+            return ResponseEntity.status(HttpStatus.OK).body(userAlkemyToken);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("{\"Error. " + e.getMessage() + ".\"}");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error. " + e.getMessage());
         }
     }
-
 
     private String getJWTToken(String username) {
         String secretKey = "mySecretKey";
@@ -81,16 +79,15 @@ public class UserAlkemyController {
                                 .map(GrantedAuthority::getAuthority)
                                 .collect(Collectors.toList()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 3600000))
+                .setExpiration(new Date((long) (System.currentTimeMillis() + 3600000)))
                 .signWith(SignatureAlgorithm.HS512,
                         secretKey.getBytes()).compact();
 
         return "Bearer " + token;
     }
 
-
     @PostMapping("/update")
-    public void save(@Valid @ModelAttribute UserAlkemy userAlkemy, BindingResult result, @RequestParam("uploadFile") MultipartFile photo) throws Exception, IOException {
+    public void saveUserAlkemy(@Valid @ModelAttribute UserAlkemy userAlkemy, BindingResult result, @RequestParam("uploadFile") MultipartFile photo) throws Exception, IOException {
         if (!photo.isEmpty()) {
             userAlkemy.setImage(userAlkemy.getImage());
         }
@@ -98,14 +95,14 @@ public class UserAlkemyController {
     }
 
     @GetMapping("/all")
-    public List<UserAlkemy> getAll() {
-        return userAlkemyService.getUser();
+    public List<UserAlkemy> getUserAlkemy() {
+        return userAlkemyService.getUserAlkemy();
     }
 
     @DeleteMapping(path = "delete/{id}")
-    public String delete(@PathVariable("id") Integer id) {
+    public String deleteUserAlkemy(@PathVariable("id") Integer id) {
         try {
-            userAlkemyService.delete(id);
+            userAlkemyService.deleteUserAlkemy(id);
             return "El usuario " + id + " fue eliminado";
         } catch (Exception e) {
             return "El usuario " + id + " no existe";
@@ -113,9 +110,9 @@ public class UserAlkemyController {
     }
 
     @GetMapping(path = "enable/{id}")
-    public String enable(@PathVariable("id") Integer id) {
+    public String enableUserAlkemy(@PathVariable("id") Integer id) {
         try {
-            userAlkemyService.enable(id);
+            userAlkemyService.enableUserAlkemy(id);
             return "El usuario " + id + " fue habilitado";
         } catch (Exception e) {
             return "El usuario " + id + " no existe";

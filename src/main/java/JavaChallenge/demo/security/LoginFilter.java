@@ -1,4 +1,4 @@
-package JavaChallenge.demo.Security;
+package JavaChallenge.demo.security;
 
 import io.jsonwebtoken.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 public class LoginFilter extends OncePerRequestFilter {
 
-
     private final String HEADER = "Authorization";
     private final String PREFIX = "Bearer ";
     private final String SECRET = "mySecretKey";
@@ -24,7 +23,7 @@ public class LoginFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
         try {
-            if (existeJWTToken(request, response)) {
+            if (existJWTToken(request, response)) {
                 Claims claims = validateToken(request);
                 if (claims.get("authorities") != null) {
                     setUpSpringAuthentication(claims);
@@ -47,11 +46,6 @@ public class LoginFilter extends OncePerRequestFilter {
         return Jwts.parser().setSigningKey(SECRET.getBytes()).parseClaimsJws(jwtToken).getBody();
     }
 
-    /**
-     * Metodo para autenticarnos dentro del flujo de Spring
-     *
-     * @param claims
-     */
     private void setUpSpringAuthentication(Claims claims) {
         @SuppressWarnings("unchecked")
         List<String> authorities = (List) claims.get("authorities");
@@ -59,10 +53,9 @@ public class LoginFilter extends OncePerRequestFilter {
         UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(claims.getSubject(), null,
                 authorities.stream().map(SimpleGrantedAuthority::new).collect(Collectors.toList()));
         SecurityContextHolder.getContext().setAuthentication(auth);
-
     }
 
-    private boolean existeJWTToken(HttpServletRequest request, HttpServletResponse res) {
+    private boolean existJWTToken(HttpServletRequest request, HttpServletResponse res) {
         String authenticationHeader = request.getHeader(HEADER);
         if (authenticationHeader == null || !authenticationHeader.startsWith(PREFIX))
             return false;

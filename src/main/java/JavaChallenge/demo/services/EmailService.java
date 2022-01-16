@@ -17,8 +17,9 @@ public class EmailService {
     private String from;
     private static final String SUBJECT = "CHALLENGE BACKEND - Java\n" +
             "Spring Boot (API) ";
-    private static final String TEXT = "Bienvenido/a la API para explorar el mundo de Disney que permite conocer y modificar los\n" +
-            "personajes que lo componen y entender en qué películas participaron.";
+    private static final String TEXT = "Bienvenido/a la API para explorar el mundo de Disney\n" +
+            "que permite conocer y modificar los personajes que lo componen y entender en qué\n" +
+            "películas participaron.";
     public void sendThread(String to) {
         new Thread(() -> {
             SimpleMailMessage message = new SimpleMailMessage();

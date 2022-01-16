@@ -14,18 +14,14 @@ public interface MovieRepository extends JpaRepository<Movie, Integer> {
 
     @Modifying
     @Query("UPDATE Movie f SET f.status = true WHERE f.idMovie = :idMovie")
-    void enable(@Param("idMovie") Integer idMovie);
+    void enableMovie(@Param("idMovie") Integer idMovie);
 
     @Query(value = "SELECT * FROM movie WHERE title LIKE '%' ? '%'", nativeQuery = true)
     List<Movie> findByTitle(String title);
 
-    //BUSCAR POR GÉNERO
     @Query(value = "SELECT * FROM movie WHERE genre_id = ?1", nativeQuery = true)
     List<Movie> filterByGenre(Integer genre);
 
-    //Mostrar sólo 3 atributos
     @Query("SELECT title, image, creationDate FROM Movie")
     List<Object[]> showFilterMovies();
-
-
 }

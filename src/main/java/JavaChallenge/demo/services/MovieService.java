@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -53,7 +51,7 @@ public class MovieService {
 
     @Transactional
     public void enable(Integer id){
-        movieRepository.enable(id);
+        movieRepository.enableMovie(id);
     }
 
     @Transactional
@@ -71,7 +69,6 @@ public class MovieService {
         return movieRepository.showFilterMovies();
     }
 
-
     @Transactional
     public List<Movie> filterByOrder(String order) {
         if (order.equals("ASC")) {
@@ -82,5 +79,4 @@ public class MovieService {
             return movieRepository.findAll();
         }
     }
-
 }

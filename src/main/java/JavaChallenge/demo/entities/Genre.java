@@ -23,7 +23,6 @@ public class Genre {
     @NotBlank(message = "El nombre es obligatorio")
     private String name;
 
-    //@NotEmpty(message = "La lista no puede estar vacía")
     @OneToMany(mappedBy="genre")
     @JsonIgnore
     private List<Movie> movieList;

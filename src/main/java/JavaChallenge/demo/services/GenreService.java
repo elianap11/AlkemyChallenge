@@ -1,13 +1,11 @@
 package JavaChallenge.demo.services;
 
-import JavaChallenge.demo.entities.CharacterMovie;
 import JavaChallenge.demo.entities.Movie;
 import JavaChallenge.demo.entities.Genre;
 import JavaChallenge.demo.repositories.GenreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Optional;
@@ -21,13 +19,9 @@ public class GenreService {
     @Autowired
     private PhotoService photoService;
 
-    public Genre createGenre(Genre genre, MultipartFile photo) throws Exception {
-        if (!photo.isEmpty()) {
-            genre.setImage(photoService.copyPhoto(photo));
-        }
+    public Genre createGenre(Genre genre){
         genre.setStatus(true);
-        genreRepository.save(genre);
-        return genre;
+        return genreRepository.save(genre);
     }
 
     @Transactional
@@ -48,7 +42,7 @@ public class GenreService {
 
     @Transactional
     public void enable(Integer id) {
-        genreRepository.enable(id);
+        genreRepository.enableGenre(id);
     }
 
     @Transactional

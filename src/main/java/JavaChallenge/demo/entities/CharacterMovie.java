@@ -39,7 +39,6 @@ public class CharacterMovie {
     @Column(nullable = false)
     private String biography;
 
-    //@NotEmpty(message = "La lista no puede estar vacía")
     @ManyToMany(mappedBy = "characterMovieList")
     @JsonIgnore
     private List<Movie> movieList;
