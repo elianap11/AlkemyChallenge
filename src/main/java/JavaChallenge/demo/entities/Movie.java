@@ -53,6 +53,6 @@ public class Movie {
         this.characterMovieList = characterMovieList;
         this.genre = genre;
         this.image = image;
-        this.status = status;
+        this.status = true;
     }
 }

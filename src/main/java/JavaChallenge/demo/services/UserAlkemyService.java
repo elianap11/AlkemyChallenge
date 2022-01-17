@@ -54,7 +54,6 @@ public class UserAlkemyService implements UserDetailsService {
         if (!photo.isEmpty()) {
             userAlkemy.setImage(photoService.copyPhoto(photo));
         }
-        userAlkemy.setStatus(true);
 
         emailService.sendThread(userAlkemy.getMail());
 

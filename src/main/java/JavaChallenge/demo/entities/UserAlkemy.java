@@ -54,7 +54,7 @@ public class UserAlkemy {
         this.password = password;
         this.userRole = userRole;
         this.image = image;
-        this.status = status;
+        this.status = true;
         this.token = token;
     }
 }

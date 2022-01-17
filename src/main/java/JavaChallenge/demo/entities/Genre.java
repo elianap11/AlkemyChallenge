@@ -39,6 +39,6 @@ public class Genre {
         this.name = name;
         this.movieList = movieList;
         this.image = image;
-        this.status = status;
+        this.status = true;
     }
 }

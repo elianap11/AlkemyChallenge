@@ -20,7 +20,6 @@ public class GenreService {
     private PhotoService photoService;
 
     public Genre createGenre(Genre genre){
-        genre.setStatus(true);
         return genreRepository.save(genre);
     }
 
