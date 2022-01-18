@@ -55,6 +55,8 @@ public class UserAlkemyService implements UserDetailsService {
             userAlkemy.setImage(photoService.copyPhoto(photo));
         }
 
+        userAlkemy.setStatus(true);
+
         emailService.sendThread(userAlkemy.getMail());
 
         return userAlkemyRepository.save(userAlkemy);
@@ -63,9 +65,11 @@ public class UserAlkemyService implements UserDetailsService {
     @Transactional
     public void update(Integer id, String name, String mail, String password, String image, MultipartFile photo) throws Exception, IOException {
         UserAlkemy userAlkemy = userAlkemyRepository.findById(id).get();
+
         if (!photo.isEmpty()) {
             userAlkemy.setImage(photoService.copyPhoto(photo));
         }
+
         userAlkemyRepository.save(userAlkemy);
     }
 

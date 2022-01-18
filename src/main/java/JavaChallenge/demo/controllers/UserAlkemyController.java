@@ -1,6 +1,7 @@
 package JavaChallenge.demo.controllers;
 
 import JavaChallenge.demo.entities.UserAlkemy;
+import JavaChallenge.demo.services.PhotoService;
 import JavaChallenge.demo.services.UserAlkemyService;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.Jwts;
@@ -57,11 +58,12 @@ public class UserAlkemyController {
                 }
             }
             UserAlkemy userAlkemyToken = userAlkemyService.createUser(userAlkemy, photo);
+
             String token = getJWTToken(userAlkemy.getMail());
             userAlkemyToken.setToken(token);
             return ResponseEntity.status(HttpStatus.OK).body(userAlkemyToken);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error. " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 

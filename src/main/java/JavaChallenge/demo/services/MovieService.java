@@ -24,6 +24,7 @@ public class MovieService {
 
     @Transactional
     public Movie createMovie(Movie movie) throws Exception {
+        movie.setStatus(true);
         return movieRepository.save(movie);
     }
 

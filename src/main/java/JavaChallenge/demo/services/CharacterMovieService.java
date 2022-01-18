@@ -33,6 +33,8 @@ public class CharacterMovieService {
         if (!photo.isEmpty()) {
             characterMovie.setImage(photoService.copyPhoto(photo));
         }
+
+        characterMovie.setStatus(true);
         return characterMovieRepository.save(characterMovie);
     }
 

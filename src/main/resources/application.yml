@@ -36,4 +36,4 @@ logging:
     springframework:
       web: debug
 my:
-  property: C:\Users\eblon\Downloads\demo\demo\src\main\resources\static\UPLOAD
+  property: C:\Users\eblon\Documents\Challenge Alkemy\demo\demo\src\main\resources\static\UPLOAD
