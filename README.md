@@ -11,6 +11,6 @@ El proyecto posee: login y registro (con envío de email de JavaMailSender), tok
 las que participaron), Películas o Series (con búsquedas por nombre, género y en orden ascendente o descendente), 
 Géneros y Usuarios. 
 
-Los endpoints fueron documentados con Postman.
+Los endpoints fueron documentados con Postman: https://documenter.getpostman.com/view/4945952/UVXnGEXo
 
-Documentación: https://elianap11.github.io/AlkemyChallenge/
+Documentación de JavaDoc: https://elianap11.github.io/AlkemyChallenge/
