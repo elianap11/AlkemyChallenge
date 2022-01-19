@@ -81,7 +81,7 @@ public class UserAlkemyController {
                                 .map(GrantedAuthority::getAuthority)
                                 .collect(Collectors.toList()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date((long) (System.currentTimeMillis() + 3600000)))
+                .setExpiration(new Date((long) (System.currentTimeMillis() + 172800000)))
                 .signWith(SignatureAlgorithm.HS512,
                         secretKey.getBytes()).compact();
 

@@ -45,8 +45,8 @@ public class MovieService {
     }
 
     @Transactional
-    public void delete(Integer id){
-        movieRepository.deleteById(id);
+    public void delete(Integer idMovie){
+        movieRepository.deleteById(idMovie);
     }
 
     @Transactional

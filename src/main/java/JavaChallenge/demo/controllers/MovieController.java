@@ -67,9 +67,9 @@ public class MovieController {
     public String deleteMovie(@PathVariable("idMovie") Integer idMovie){
         try {
             movieService.delete(idMovie);
-            return "La película "+idMovie+" fue eliminada";
+            return "La película " +idMovie+" fue eliminada";
         } catch (Exception e) {
-            return "La película "+idMovie+" no existe";
+            return "La película " +idMovie+" no existe";
         }
     }
 
@@ -78,9 +78,9 @@ public class MovieController {
     public String enableMovie(@PathVariable("idMovie") Integer idMovie) {
         try {
             movieService.enable(idMovie);
-            return "El personaje " + idMovie + " fue habilitado";
+            return "La película " + idMovie + " fue habilitada";
         } catch (Exception e) {
-            return "El personaje " + idMovie + " no existe";
+            return "La película " + idMovie + " no existe";
         }
     }
 }

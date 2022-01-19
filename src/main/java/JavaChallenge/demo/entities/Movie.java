@@ -12,7 +12,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@SQLDelete(sql = "UPDATE movie SET status = false WHERE id = ?")
+@SQLDelete(sql = "UPDATE movie SET status = false WHERE id_movie = ?")
 public class Movie {
 
     @Id
