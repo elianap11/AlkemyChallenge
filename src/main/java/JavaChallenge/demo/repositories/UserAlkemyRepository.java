@@ -14,10 +14,7 @@ public interface UserAlkemyRepository extends JpaRepository<UserAlkemy, Integer>
 
     Optional<UserAlkemy> findByMail(String mail);
 
-    boolean existsByMail(String mail);
-
     @Modifying
     @Query("UPDATE UserAlkemy u SET u.status = true WHERE u.id = :id")
     void enable(@Param("id") Integer id);
-
 }

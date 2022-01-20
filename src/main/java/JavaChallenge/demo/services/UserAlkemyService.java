@@ -90,6 +90,16 @@ public class UserAlkemyService implements UserDetailsService {
     }
 
     @Transactional
+    public boolean verifyPassword(String passUser1, String passUser2) {
+        if (encoder.matches(passUser1, passUser2)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    @Transactional
     public void enableUserAlkemy(Integer id) {
         userAlkemyRepository.enable(id);
     }
@@ -98,6 +108,8 @@ public class UserAlkemyService implements UserDetailsService {
     public void deleteUserAlkemy(Integer id) {
         userAlkemyRepository.deleteById(id);
     }
+
+
 
     @Override
     public UserDetails loadUserByUsername(String mail) throws UsernameNotFoundException {

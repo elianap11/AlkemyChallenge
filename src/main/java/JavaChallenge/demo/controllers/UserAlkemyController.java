@@ -1,13 +1,14 @@
 package JavaChallenge.demo.controllers;
 
+import JavaChallenge.demo.entities.Movie;
 import JavaChallenge.demo.entities.UserAlkemy;
-import JavaChallenge.demo.services.PhotoService;
 import JavaChallenge.demo.services.UserAlkemyService;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -28,25 +30,29 @@ public class UserAlkemyController {
     @Autowired
     private UserAlkemyService userAlkemyService;
 
-    private UserAlkemy userAlkemy;
-
     @PostMapping("/login")
-    public ResponseEntity<?> loginUserAlkemy(@Valid @ModelAttribute UserAlkemy userAlkemy, BindingResult result) throws Exception {
+    public ResponseEntity<?> loginUser(@Valid @ModelAttribute UserAlkemy userAlkemy, BindingResult result) throws Exception {
         try {
             if (userAlkemy != null) {
-                UserDetails userAlkemyDetails = userAlkemyService.loadUserByUsername(userAlkemy.getMail());
-                if (userAlkemyDetails == null) {
-                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error. No se encontró un usuario registrado con ese correo");
+                UserDetails userDetails = userAlkemyService.loadUserByUsername(userAlkemy.getMail());
+                if (userDetails == null) {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Correo no encontrado.");
                 }
-                String token = getJWTToken(userAlkemy.getMail());
-                userAlkemy.setToken(token);
-                return ResponseEntity.status(HttpStatus.OK).body("Mail: " + userAlkemy.getMail() + "\nToken: " + userAlkemy.getToken());
+                if (userAlkemyService.verifyPassword(userAlkemy.getPassword(), userDetails.getPassword())) {
+
+                    String token = getJWTToken(userAlkemy.getMail());
+                    userAlkemy.setToken(token);
+                    return ResponseEntity.status(HttpStatus.OK).body("Mail: " + userAlkemy.getMail() + "\nToken: " + userAlkemy.getToken());
+                } else {
+                    return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Contraseña incorrecta.");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUserAlkemy(@Valid @ModelAttribute UserAlkemy userAlkemy, BindingResult result, @RequestParam(value = "image") MultipartFile photo) {
@@ -57,6 +63,7 @@ public class UserAlkemyController {
                     return ResponseEntity.status(HttpStatus.ALREADY_REPORTED).body("Ya se encuentra registrado un usuario con ese correo");
                 }
             }
+
             UserAlkemy userAlkemyToken = userAlkemyService.createUser(userAlkemy, photo);
 
             String token = getJWTToken(userAlkemy.getMail());
@@ -88,19 +95,23 @@ public class UserAlkemyController {
         return "Bearer " + token;
     }
 
-    @PostMapping("/update")
-    public void saveUserAlkemy(@Valid @ModelAttribute UserAlkemy userAlkemy, BindingResult result, @RequestParam("uploadFile") MultipartFile photo) throws Exception, IOException {
-        if (!photo.isEmpty()) {
-            userAlkemy.setImage(userAlkemy.getImage());
-        }
-        userAlkemyService.createUser(userAlkemy, photo);
+    @GetMapping("/{id}")
+    public Optional<UserAlkemy> getById(@PathVariable("id") Integer id) {
+        return Optional.ofNullable(userAlkemyService.findById(id));
     }
 
+    @PostMapping("/update")
+    public void saveUserAlkemy(@Valid @ModelAttribute UserAlkemy userAlkemy, BindingResult result, @RequestParam(value = "image") MultipartFile photo) throws Exception, IOException {
+           userAlkemyService.createUser(userAlkemy, photo);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/all")
     public List<UserAlkemy> getUserAlkemy() {
         return userAlkemyService.getUserAlkemy();
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping(path = "delete/{id}")
     public String deleteUserAlkemy(@PathVariable("id") Integer id) {
         try {
@@ -111,6 +122,7 @@ public class UserAlkemyController {
         }
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping(path = "enable/{id}")
     public String enableUserAlkemy(@PathVariable("id") Integer id) {
         try {
