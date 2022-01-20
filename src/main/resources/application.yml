@@ -20,8 +20,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: newtesting920@gmail.com
-    password: calavera*calabaza
+    username: 
+    password:
     properties:
       mail:
         smtp:
@@ -36,4 +36,4 @@ logging:
     springframework:
       web: debug
 my:
-  property: C:\Users\eblon\Documents\Challenge Alkemy\demo\demo\src\main\resources\static\UPLOAD
+  property:
